@@ -2,39 +2,34 @@ import streamlit as st
 import google.generativeai as genai
 
 st.set_page_config(page_title="Sameed.core", page_icon="🤖")
-
 st.title("🤖 Sameed.core")
 st.write("Official AI Avatar of Sameed | Data Analyst")
-st.markdown("---")
 
-# STEP 1: Apni Nayi API Key yahan quotes ke beech daalein
+# STEP: Apni NAYI KEY yahan paste karein
 API_KEY = "AIzaSyApCEXfY-bjHlC7fFLtD2dVPUer8FT4YPQ"
 
-try:
-    genai.configure(api_key=API_KEY)
-    
-    # Naya model format jo 2026 mein standard hai
-    model = genai.GenerativeModel('gemini-1.5-flash')
+# Google ko batana ki humein purana v1beta nahi chahiye
+genai.configure(api_key=API_KEY, transport='rest')
 
-    if "messages" not in st.session_state:
-        st.session_state.messages = []
+# Naya model select karne ka sahi tarika
+model = genai.GenerativeModel('gemini-1.5-flash')
 
-    for message in st.session_state.messages:
-        with st.chat_message(message["role"]):
-            st.markdown(message["content"])
+if "messages" not in st.session_state:
+    st.session_state.messages = []
 
-    if prompt := st.chat_input("Sameed.core se puchiye..."):
-        st.session_state.messages.append({"role": "user", "content": prompt})
-        with st.chat_message("user"):
-            st.markdown(prompt)
+for message in st.session_state.messages:
+    with st.chat_message(message["role"]):
+        st.markdown(message["content"])
 
-        # Chatbot ka response
-        response = model.generate_content(f"You are Sameed's AI assistant. Answer briefly: {prompt}")
-        
+if prompt := st.chat_input("Sameed.core se puchiye..."):
+    st.session_state.messages.append({"role": "user", "content": prompt})
+    with st.chat_message("user"):
+        st.markdown(prompt)
+    try:
+        # Response mangne ka tarika
+        response = model.generate_content(prompt)
         with st.chat_message("assistant"):
             st.markdown(response.text)
         st.session_state.messages.append({"role": "assistant", "content": response.text})
-
-except Exception as e:
-    # Isse humein pata chalega exactly kya error hai
-    st.error(f"Opps! Dikkat yahan hai: {e}")
+    except Exception as e:
+        st.error(f"Dikkat yahan hai: {e}")
