@@ -2,17 +2,14 @@ import streamlit as st
 import google.generativeai as genai
 
 st.set_page_config(page_title="Sameed.core", page_icon="🤖")
-
 st.title("🤖 Sameed.core")
 st.write("Official AI Avatar of Sameed | Data Analyst")
 
-# STEP 1: Apni Nayi API Key yahan quotes ke beech daalein
-API_KEY = "AIzaSyDISnUx63cMAb-o-aiY1TsNlXxV2lwnY5w"
+# STEP: Yahan apni NAYI API KEY dhyan se paste karein
+API_KEY = "AIzaSyApCEXfY-bjHlC7fFLtD2dVPUer8FT4YPQ"
 
 genai.configure(api_key=API_KEY)
-
-# STEP 2: Naya model naam (Jo error nahi dega)
-model = genai.GenerativeModel('gemini-1.5-flash-latest')
+model = genai.GenerativeModel('gemini-1.5-flash')
 
 if "messages" not in st.session_state:
     st.session_state.messages = []
@@ -25,9 +22,7 @@ if prompt := st.chat_input("Sameed.core se puchiye..."):
     st.session_state.messages.append({"role": "user", "content": prompt})
     with st.chat_message("user"):
         st.markdown(prompt)
-
     try:
-        # Simple response generation
         response = model.generate_content(f"You are Sameed's AI assistant. Answer: {prompt}")
         with st.chat_message("assistant"):
             st.markdown(response.text)
