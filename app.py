@@ -2,13 +2,14 @@ import streamlit as st
 import google.generativeai as genai
 
 st.set_page_config(page_title="Sameed.core", page_icon="🤖")
-
 st.title("🤖 Sameed.core")
 st.write("Official AI Avatar of Sameed | Data Analyst")
 
-# API Key - Isse dhyan se check karein
+# API Key setup
 genai.configure(api_key="AIzaSyDhMsoji0XAx4nYcDBE6UdNhrDbXxj2Woc")
-model = genai.GenerativeModel('gemini-1.5-flash')
+
+# Yahan 'models/' lagana zaroori hai
+model = genai.GenerativeModel('models/gemini-1.5-flash')
 
 if "messages" not in st.session_state:
     st.session_state.messages = []
@@ -22,13 +23,11 @@ if prompt := st.chat_input("Ask me anything!"):
     with st.chat_message("user"):
         st.markdown(prompt)
 
-    # Ekdum seedha aur saaf instruction
-    full_prompt = f"You are Sameed.core, the AI twin of Sameed from Chikodi. Sameed is a Data Analyst. Answer this: {prompt}"
-    
     try:
-        response = model.generate_content(full_prompt)
+        # Simple prompt
+        response = model.generate_content(f"You are Sameed's AI. Answer: {prompt}")
         with st.chat_message("assistant"):
             st.markdown(response.text)
         st.session_state.messages.append({"role": "assistant", "content": response.text})
     except Exception as e:
-        st.error(f"Opps! Kuch gadbad hui. Error: {e}")
+        st.error(f"Error: {e}")
