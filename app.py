@@ -5,11 +5,11 @@ st.set_page_config(page_title="Sameed.core", page_icon="🤖")
 st.title("🤖 Sameed.core")
 st.write("Official AI Avatar of Sameed | Data Analyst")
 
-# API Key setup
+# API Key - Wahi purani wali use kar rahe hain
 genai.configure(api_key="AIzaSyDhMsoji0XAx4nYcDBE6UdNhrDbXxj2Woc")
 
-# Yahan 'models/' lagana zaroori hai
-model = genai.GenerativeModel('models/gemini-1.5-flash')
+# Naya tarika: Bina version mention kiye model select karna
+model = genai.GenerativeModel('gemini-1.5-flash')
 
 if "messages" not in st.session_state:
     st.session_state.messages = []
@@ -24,10 +24,18 @@ if prompt := st.chat_input("Ask me anything!"):
         st.markdown(prompt)
 
     try:
-        # Simple prompt
-        response = model.generate_content(f"You are Sameed's AI. Answer: {prompt}")
+        # Prompt ko thoda aur simple rakhte hain
+        response = model.generate_content(f"Answer this as Sameed's AI Avatar: {prompt}")
+        
+        if response.text:
+            with st.chat_message("assistant"):
+                st.markdown(response.text)
+            st.session_state.messages.append({"role": "assistant", "content": response.text})
+    except Exception as e:
+        # Agar abhi bhi 404 aaye, toh hum alternative model try karenge
+        st.warning("Switching to backup model...")
+        backup_model = genai.GenerativeModel('gemini-pro')
+        response = backup_model.generate_content(prompt)
         with st.chat_message("assistant"):
             st.markdown(response.text)
         st.session_state.messages.append({"role": "assistant", "content": response.text})
-    except Exception as e:
-        st.error(f"Error: {e}")
