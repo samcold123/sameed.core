@@ -11,7 +11,7 @@ st.write("Official AI Avatar of Sameed | Data Analyst | SQL Developer")
 
 # API Key Setup - Is line mein apni key daal dena
 # Example: genai.configure(api_key="AIzaSy...")
-genai.configure(api_key="AIzaSyDhMsoji0XAx4nYcDBE6UdNhrDbXxj2Woc")
+genai.configure(api_key="AIzaSyBeSaJ1Sx-5vLcq0J1AfofA2Zun9tOF_X0")
 
 # Model selection
 model = genai.GenerativeModel('gemini-1.5-flash')
